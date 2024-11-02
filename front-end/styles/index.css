@@ -35,6 +35,12 @@ div.word:hover {
   background-color: #555; /* Lighter on hover */
 }
 
+#IconFlash {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
 @media (max-width: 600px) {
   div.word {
     width: 100%; /* Full width on smaller screens */

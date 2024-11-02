@@ -19,8 +19,14 @@ func GetWords(c *gin.Context) {
 
 func AddVocab(c *gin.Context) {
 	var word schemas.Word
+	var duplicada schemas.Word
 	if err := c.BindJSON(&word); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if err := db.Where("korean_word = ?", word.KoreanWord).First(&duplicada).Error; err == nil {
+
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": "word already added"})
 		return
 	}
 

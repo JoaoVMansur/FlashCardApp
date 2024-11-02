@@ -22,10 +22,19 @@ document
         body: JSON.stringify(newWord),
       });
 
-      if (!response.ok) {
+      if (response.status === 406) {
+        // Handle the 406 response
+        const data = await response.json();
+        alert(data.error); // Show the error message from the server
+      } else if (!response.ok) {
         throw new Error("Network response was not ok: " + response.statusText);
+      } else {
+        // Optionally handle success response
+        const result = await response.json();
+        alert("Word added successfully! ID: " + result.id);
       }
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
+      alert("An error occurred: " + error.message);
     }
   });
