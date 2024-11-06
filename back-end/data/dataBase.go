@@ -13,7 +13,7 @@ func InitDb() (*gorm.DB, error) {
 	if err != nil {
 		log.Fatal("Error openning database connection: ", err)
 	}
-	err = db.AutoMigrate(&schemas.Word{})
+	err = db.AutoMigrate(&schemas.Word{}, &schemas.User{})
 
 	if err != nil {
 		return nil, err
