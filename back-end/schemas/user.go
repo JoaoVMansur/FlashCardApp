@@ -1,10 +1,13 @@
 package schemas
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
-	UserName string
-	PassWord string
+	UserName string `gorm:"not null"`
+	PassWord string `gorm:"not null"`
+	Email    string `gorm:"unique;not null"`
 	Words    []Word
 }
