@@ -1,0 +1,56 @@
+.container {
+  background-color: #444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 350px; /* Increased width */
+  text-align: center;
+}
+
+#addCardTitle {
+  font-size: 2em; /* Larger font size */
+  margin-bottom: 20px;
+  color: #ffa500;
+  font-family: "Arial", sans-serif; /* Modern font */
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #666;
+  border-radius: 50px;
+  background-color: #555;
+  color: #f0f0f0;
+}
+
+input::placeholder {
+  color: #bbb; /* Placeholder text color */
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #ffa500;
+}
+
+.addCardButton {
+  width: 60%; /* Wider button */
+  padding: 10px 0;
+  border: none;
+  margin-top: 10px;
+  border-radius: 50px;
+  background-color: #ffa500;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s; /* Add transition for shadow */
+}
+
+.addCardButton:hover {
+  background-color: #ff8c00;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow on hover */
+}
