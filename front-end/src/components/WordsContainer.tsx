@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import featchWords from "../api/fetchWords";
 
 interface Word {
-  id: number;
+  ID: number;
   KoreanWord: string;
   PortugueseWord: string;
 }
@@ -25,7 +25,7 @@ const WordsContainer: React.FC = () => {
   return (
     <div id="wordsContainer">
       {words.map((word) => (
-        <div key={word.id} className="word">
+        <div key={word.ID} className="word">
           {word.KoreanWord} - {word.PortugueseWord}
         </div>
       ))}

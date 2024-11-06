@@ -2,7 +2,11 @@ import { useState } from "react";
 import logo from "../assets/card-file-box-svgrepo-com.svg";
 import "../Styles/Header.css";
 
-const Header = () => {
+interface Props {
+  userName?: string;
+}
+
+function Header(props: Props) {
   return (
     <nav className="navbar navbar-expand navbar-dark">
       <div className="container-fluid">
@@ -22,10 +26,21 @@ const Header = () => {
               Profile
             </a>
           </div>
+          <div className="navbar-nav ms-auto">
+            {!props.userName ? (
+              <a className="nav-link" href="/login">
+                Login
+              </a>
+            ) : (
+              <a className="nav-link" href="/login">
+                Welcome, {props.userName}!
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </nav>
   );
-};
+}
 
 export default Header;
