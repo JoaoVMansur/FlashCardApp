@@ -1,4 +1,4 @@
-package usercontroller
+package userController
 
 import (
 	"JoaoVMansur/Korean-Portuguese-vocab/repositories/userRepository"
@@ -28,7 +28,7 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 	if user.PassWord != passWord {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Password or User Invalid"})
 	}
-	c.JSON(http.StatusFound, user.ID)
+	c.JSON(http.StatusOK, user.ID)
 }
 
 func SignUp(c *gin.Context, db *gorm.DB) {

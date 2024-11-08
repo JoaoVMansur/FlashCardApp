@@ -1,23 +1,23 @@
 package handlers
 
 import (
-	usercontroller "JoaoVMansur/Korean-Portuguese-vocab/controllers/userController"
-	wordcontroller "JoaoVMansur/Korean-Portuguese-vocab/controllers/wordController"
+	"JoaoVMansur/Korean-Portuguese-vocab/controllers/cardController"
+	"JoaoVMansur/Korean-Portuguese-vocab/controllers/userController"
 
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
 	r.GET("/words", func(c *gin.Context) {
-		wordcontroller.GetWords(c, db)
+		cardController.GetCards(c, db)
 	})
 	r.POST("/word", func(c *gin.Context) {
-		wordcontroller.AddWord(c, db)
+		cardController.AddCard(c, db)
 	})
 	r.POST("/login", func(c *gin.Context) {
-		usercontroller.LogIn(c, db)
+		userController.LogIn(c, db)
 	})
 	r.POST("/signup", func(c *gin.Context) {
-		usercontroller.SignUp(c, db)
+		userController.SignUp(c, db)
 	})
 }

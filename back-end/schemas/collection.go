@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type Collection struct {
 	gorm.Model
-	UserID         uint   `gorm:"not null"`
-	CollectionName string `gorm:not null`
+	UserID         uint `gorm:"not null"`
+	CollectionName string
 	Owner          User   `gorm:"foreignKey:UserID"`
-	Words          []Word `gorm:"foreignKey:CollectionID"`
+	Cards          []Card `gorm:"foreignKey:CollectionID"`
 }

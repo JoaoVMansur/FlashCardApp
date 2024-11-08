@@ -1,7 +1,7 @@
-package wordcontroller
+package cardController
 
 import (
-	"JoaoVMansur/Korean-Portuguese-vocab/repositories/wordRepository"
+	cardRepository "JoaoVMansur/Korean-Portuguese-vocab/repositories/cardRepository"
 	"JoaoVMansur/Korean-Portuguese-vocab/schemas"
 	"net/http"
 
@@ -9,8 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetWords(c *gin.Context, db *gorm.DB) {
-	words, err := wordRepository.GetAllWords(db)
+func GetCards(c *gin.Context, db *gorm.DB) {
+	cards, err := cardRepository.GetAllCards(db)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Internal Server Error",
@@ -18,19 +18,19 @@ func GetWords(c *gin.Context, db *gorm.DB) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, words)
+	c.JSON(http.StatusOK, cards)
 }
 
-func AddWord(c *gin.Context, db *gorm.DB) {
-	var word schemas.Word
-	if err := c.BindJSON(&word); err != nil {
+func AddCard(c *gin.Context, db *gorm.DB) {
+	var card schemas.Card
+	if err := c.BindJSON(&card); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	wordId, err := wordRepository.AddWord(db, &word)
+	cardId, err := cardRepository.AddCard(db, &card)
 	if err != nil {
 
-		if customErr, ok := err.(*wordRepository.WordAlreadyAddedError); ok && customErr.Status == 406 {
+		if customErr, ok := err.(*cardRepository.CardAlreadyAddedError); ok && customErr.Status == 406 {
 			c.JSON(http.StatusNotAcceptable, gin.H{
 				"error":   "Not Acceptable",
 				"message": customErr.Message,
@@ -43,7 +43,7 @@ func AddWord(c *gin.Context, db *gorm.DB) {
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Word added succesfully",
-		"wordID":  wordId,
+		"message": "card added succesfully",
+		"cardID":  cardId,
 	})
 }
