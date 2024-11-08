@@ -20,6 +20,8 @@ function LoginForm() {
       passWord,
     };
     const data = await Login(user);
+    console.log("TAMO NO LOGIN FORM");
+    console.log(data);
     if (data) {
       navigate("/home", { state: { userName: userName } });
     } else {

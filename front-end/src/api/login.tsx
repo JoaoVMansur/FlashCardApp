@@ -1,22 +1,26 @@
+import axios from "axios";
+
+const baseURL = import.meta.env.VITE_BASE_URL; // Vite env variable
+
 interface User {
   userName: string;
   passWord: string;
 }
 
 async function Login(user: User) {
-  console.log("chamou?");
-  const response = await fetch("http://localhost:8080/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
-  if (response.status != 302) {
+  try {
+    const response = await axios.post(`${baseURL}/login`, user); // Remove JSON.stringify
+    if (response.status !== 200) {
+      console.error(
+        `Error: Received unexpected status code ${response.status}`
+      );
+      return null;
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Error during login:", error);
     return null;
   }
-  const data = await response.json();
-  return data;
 }
 
 export default Login;

@@ -1,7 +1,18 @@
+import axios from "axios";
+import { baseURL } from "../Globals";
 async function featchWords() {
-  const response = await fetch("http://localhost:8080/words");
-  const json = await response.json();
-  return json;
+  try {
+    const response = await axios.get(`${baseURL}/words`);
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("axios error: ", error.message);
+    } else {
+      console.log("Unexpected error: ", error);
+    }
+    throw error;
+  }
 }
 
 export default featchWords;

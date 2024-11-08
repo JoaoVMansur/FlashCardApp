@@ -3,51 +3,51 @@ import addCard from "../api/addCard";
 import "../Styles/AddCard.css";
 import React, { useState } from "react";
 
-interface Word {
-  KoreanWord: string;
-  PortugueseWord: string;
+interface Card {
+  front: string;
+  verse: string;
 }
 
 function Card() {
-  const [koreanWord, setKoreanWord] = useState("");
-  const [portugueseWord, setPortugueseWord] = useState("");
+  const [front, setFront] = useState("");
+  const [verse, setVerse] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newWord: Word = {
-      KoreanWord: koreanWord,
-      PortugueseWord: portugueseWord,
+    const card: Card = {
+      front: front,
+      verse: verse,
     };
-    const data = await addCard(newWord);
+    const data = await addCard(card);
+    console.log("DATA");
+    console.log(data);
     if (!data) {
       alert("Word Already Added");
     } else {
-      alert(
-        `Word Added With Success ${newWord.KoreanWord}-${newWord.PortugueseWord}`
-      );
+      alert(`Word Added With Success ${card.front}-${card.verse}`);
       navigate("/Home");
     }
   };
 
   return (
     <div className="container" id="card">
-      <h1 id="addCardTitle">Add a New Word</h1>
+      <h1 id="addCardTitle">Add New Card</h1>
       <form id="addWordForm" onSubmit={handleSubmit}>
         <input
           type="text"
-          id="korean"
-          placeholder="Korean"
-          value={koreanWord}
-          onChange={(e) => setKoreanWord(e.target.value)}
+          id="Front"
+          placeholder="Front"
+          value={front}
+          onChange={(e) => setFront(e.target.value)}
           required
         />
         <input
           type="text"
-          id="portuguese"
-          placeholder="Portuguese"
-          value={portugueseWord}
-          onChange={(e) => setPortugueseWord(e.target.value)}
+          id="Verse"
+          placeholder="Verse"
+          value={verse}
+          onChange={(e) => setVerse(e.target.value)}
           required
         />
         <button type="submit" className="addCardButton">

@@ -1,23 +1,24 @@
+import { baseURL } from "../Globals";
+import axios from "axios";
 interface addCardRequest {
-  KoreanWord: string;
-  PortugueseWord: string;
+  front: string;
+  verse: string;
 }
 
-async function addCard(newWord: addCardRequest) {
-  const response = await fetch("http://localhost:8080/word", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newWord),
-  });
-  if (response.status == 406) {
-    const data = await response.json();
-    console.log(data.error);
-    return null;
+async function addCard(newCard: addCardRequest) {
+  try {
+    const response = await axios.post(`${baseURL}/word`, newCard);
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    if (error.status == 406) {
+      console.error("axios error: ", error.message);
+      return null;
+    } else {
+      console.error("unexpected error: ", error);
+    }
+    throw error;
   }
-  const data = await response.json();
-  return data;
 }
 
 export default addCard;
