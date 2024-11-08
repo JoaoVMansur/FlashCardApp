@@ -1,6 +1,7 @@
 package userController
 
 import (
+	"JoaoVMansur/Korean-Portuguese-vocab/auth"
 	"JoaoVMansur/Korean-Portuguese-vocab/repositories/userRepository"
 	"JoaoVMansur/Korean-Portuguese-vocab/schemas"
 	"net/http"
@@ -15,6 +16,7 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 
 	if err := c.BindJSON(&userFetched); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	passWord := userFetched.PassWord
@@ -23,12 +25,23 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Password or User Invalid"})
+		return
 	}
 
 	if user.PassWord != passWord {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Password or User Invalid"})
+		return
 	}
-	c.JSON(http.StatusOK, user.ID)
+
+	tokenString, err := auth.CreateToken(user.UserName, user.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+
+	c.JSON(http.StatusOK, tokenString)
 }
 
 func SignUp(c *gin.Context, db *gorm.DB) {
