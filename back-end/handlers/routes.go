@@ -21,4 +21,7 @@ func SetupRoutes(r *gin.Engine) {
 	r.POST("/signup", func(c *gin.Context) {
 		userController.SignUp(c, db)
 	})
+	r.GET("/validate-token", func(c *gin.Context) {
+		userController.ValidateToken(c)
+	})
 }

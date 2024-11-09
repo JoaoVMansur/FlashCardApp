@@ -5,6 +5,7 @@ import (
 	"JoaoVMansur/Korean-Portuguese-vocab/repositories/userRepository"
 	"JoaoVMansur/Korean-Portuguese-vocab/schemas"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -41,7 +42,9 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 
-	c.JSON(http.StatusOK, tokenString)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Login Successfull",
+	})
 }
 
 func SignUp(c *gin.Context, db *gorm.DB) {
@@ -58,5 +61,35 @@ func SignUp(c *gin.Context, db *gorm.DB) {
 	}
 
 	c.JSON(http.StatusCreated, userID)
+
+}
+func ValidateToken(c *gin.Context) {
+
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Token Not Found",
+		})
+		return
+	}
+	claims, err := auth.VerifyToken(tokenString)
+	if err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid Token",
+		})
+		return
+	}
+	exp := claims["exp"].(float64)
+	now := float64(time.Now().Unix())
+	if now > exp {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Token Expired",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Token Validated",
+	})
 
 }
