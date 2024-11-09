@@ -67,7 +67,7 @@ func ValidateToken(c *gin.Context) {
 
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Token Not Found",
 		})
 		return
@@ -75,12 +75,19 @@ func ValidateToken(c *gin.Context) {
 	claims, err := auth.VerifyToken(tokenString)
 	if err != nil {
 
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Invalid Token",
 		})
 		return
 	}
-	exp := claims["exp"].(float64)
+	exp, ok := claims["exp"].(float64)
+
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Invalid Token Format",
+		})
+		return
+	}
 	now := float64(time.Now().Unix())
 	if now > exp {
 		c.JSON(http.StatusBadRequest, gin.H{
