@@ -9,7 +9,9 @@ interface User {
 
 async function Login(user: User) {
   try {
-    const response = await axios.post(`${baseURL}/login`, user); // Remove JSON.stringify
+    const response = await axios.post(`${baseURL}/login`, user, {
+      withCredentials: true,
+    });
     if (response.status !== 200) {
       console.error(
         `Error: Received unexpected status code ${response.status}`

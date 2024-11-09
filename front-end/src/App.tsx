@@ -3,15 +3,30 @@ import "./App.css";
 import Home from "./pages/Home";
 import AddCard from "./pages/AddCard";
 import Login from "./pages/Login";
+import PrivateRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Login></Login>}></Route>
-          <Route path="/Home" element={<Home></Home>}></Route>
-          <Route path="/addCard" element={<AddCard></AddCard>}></Route>
-          <Route path="/Login" element={<Login></Login>}></Route>
+          <Route index element={<Login />} />
+          <Route
+            path="/Home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/addCard"
+            element={
+              <PrivateRoute>
+                <AddCard />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/Login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>
