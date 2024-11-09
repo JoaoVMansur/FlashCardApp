@@ -2,7 +2,9 @@ import axios from "axios";
 import { baseURL } from "../Globals";
 async function featchWords() {
   try {
-    const response = await axios.get(`${baseURL}/words`);
+    const response = await axios.get(`${baseURL}/words`, {
+      withCredentials: true,
+    });
     const data = await response.data;
     return data;
   } catch (error) {

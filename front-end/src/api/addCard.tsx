@@ -7,7 +7,9 @@ interface addCardRequest {
 
 async function addCard(newCard: addCardRequest) {
   try {
-    const response = await axios.post(`${baseURL}/word`, newCard);
+    const response = await axios.post(`${baseURL}/word`, newCard, {
+      withCredentials: true,
+    });
     const data = await response.data;
     return data;
   } catch (error: any) {

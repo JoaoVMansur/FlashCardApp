@@ -16,17 +16,12 @@ const CardsContainer: React.FC = () => {
       try {
         const data = await featchWords();
         setCards(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching words:", error);
       }
     };
     fetchData();
   }, []);
-  cards.map((card) => {
-    console.log("ESTA SAO AS CARTAS");
-    console.log(card);
-  });
   return (
     <div id="cardsContainer">
       {cards.map((card) => (

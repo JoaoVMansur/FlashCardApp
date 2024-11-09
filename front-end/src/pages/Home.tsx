@@ -5,8 +5,7 @@ import { useLocation } from "react-router-dom";
 function Home() {
   const location = useLocation();
 
-  const userName = location.state ? location.state.userNAme : "Joao";
-
+  const userName = location.state ? location.state.userName : "Joao";
   return (
     <div>
       <Header userName={userName}></Header>

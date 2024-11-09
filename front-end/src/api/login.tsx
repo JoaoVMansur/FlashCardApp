@@ -16,6 +16,7 @@ async function Login(user: User) {
       );
       return null;
     }
+    document.cookie = `Authorization=${response.data}`;
     return response.data;
   } catch (error) {
     console.error("Error during login:", error);
