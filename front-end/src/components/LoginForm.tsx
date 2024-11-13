@@ -1,7 +1,9 @@
 import "../Styles/Login.css";
-import { Link, NavigationType, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import Login from "../api/login";
+import { useDispatch } from "react-redux";
+import { setUser } from "../Redux/user/userSlice";
 
 interface User {
   userName: string;
@@ -11,17 +13,26 @@ interface User {
 function LoginForm() {
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const user: User = {
       userName,
       passWord,
     };
+
     const data = await Login(user);
     if (data) {
-      navigate("/home", { state: { userName: userName } });
+      dispatch(
+        setUser({
+          userID: data.userID,
+          userName: userName,
+        })
+      );
+      navigate("/home");
     } else {
       alert("Login Failed");
     }

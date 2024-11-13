@@ -1,13 +1,11 @@
 import Header from "../components/Header";
 import CardsContainer from "../components/CardsContainer";
-import { useLocation } from "react-router-dom";
+import { RootState } from "../Redux/store/userStore";
+import { useSelector } from "react-redux";
 function Home() {
-  const location = useLocation();
-
-  const userName = location.state ? location.state.userName : "Joao";
   return (
     <div>
-      <Header userName={userName}></Header>
+      <Header></Header>
       <CardsContainer></CardsContainer>
     </div>
   );

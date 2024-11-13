@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const baseURL = import.meta.env.VITE_BASE_URL; // Vite env variable
+import { baseURL } from "../Globals";
 
 interface User {
   userName: string;
@@ -18,7 +17,6 @@ async function Login(user: User) {
       );
       return null;
     }
-    document.cookie = `Authorization=${response.data}`;
     return response.data;
   } catch (error) {
     console.error("Error during login:", error);

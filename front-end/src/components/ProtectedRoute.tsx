@@ -2,36 +2,43 @@ import axios from "axios";
 import { useEffect, useState, ReactNode } from "react";
 import { baseURL } from "../Globals";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../Redux/store/userStore";
+import { setUser } from "../Redux/user/userSlice";
 
 interface PrivateRouteProps {
-  children: ReactNode; // Declare children as a ReactNode type
+  children: ReactNode;
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const userState = useSelector((state: RootState) => state.User);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!userState.isLoggedIn) {
+      console.log(userState);
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    console.log("Validando token");
     axios
       .get(`${baseURL}/validate-token`, { withCredentials: true })
-      .then(() => {
-        setIsAuthenticated(true);
+      .then((response) => {
+        dispatch(
+          setUser({
+            userID: response.data.userID,
+            userName: response.data.userName,
+          })
+        );
       })
       .catch(() => {
-        setIsAuthenticated(false);
+        navigate("/login", { replace: true });
       });
-  }, []);
+  }, [userState, dispatch, navigate]);
 
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    navigate("/login", { replace: true });
-    return null; // No children will be rendered if not authenticated
-  }
-
-  return <>{children}</>; // Render the children if authenticated
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

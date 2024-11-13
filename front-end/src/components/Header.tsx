@@ -1,12 +1,25 @@
 import { useState } from "react";
 import logo from "../assets/card-file-box-svgrepo-com.svg";
 import "../Styles/Header.css";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../Redux/store/userStore";
+import { logout } from "../Redux/user/userSlice";
+import { logoutCall } from "../api/logout";
 
-interface Props {
-  userName?: string;
-}
+function Header() {
+  const [showLogout, setShowLogout] = useState(false);
+  const dispatch = useDispatch();
+  const userState = useSelector((state: RootState) => state.User);
 
-function Header(props: Props) {
+  const logoutUser = async () => {
+    const result = await logoutCall();
+    if (result.success) {
+      dispatch(logout());
+    } else {
+      console.error(result.error);
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand navbar-dark">
       <div className="container-fluid">
@@ -16,7 +29,7 @@ function Header(props: Props) {
 
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
-            <a className="nav-link active" aria-current="page" href="/Home">
+            <a className="nav-link" aria-current="page" href="/Home">
               Home
             </a>
             <a className="nav-link" href="/AddCard">
@@ -26,15 +39,25 @@ function Header(props: Props) {
               Profile
             </a>
           </div>
-          <div className="navbar-nav ms-auto">
-            {!props.userName ? (
-              <a className="nav-link" href="/login">
-                Login
-              </a>
-            ) : (
-              <a className="nav-link" href="/login">
-                Welcome, {props.userName}!
-              </a>
+          <div
+            className="navbar-nav ms-auto"
+            id="userName-header"
+            onMouseEnter={() => setShowLogout(true)}
+            onMouseLeave={() => {
+              setTimeout(() => setShowLogout(false), 200);
+            }}
+          >
+            Welcome, {userState.userName}!
+            {showLogout && (
+              <div
+                className="logout-popup"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  logoutUser();
+                }}
+              >
+                Logout
+              </div>
             )}
           </div>
         </div>
