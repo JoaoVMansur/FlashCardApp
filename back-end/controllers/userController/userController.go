@@ -40,11 +40,16 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 		return
 	}
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+	c.SetCookie("Authorization", tokenString, 3600*24, "", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Login Successfull",
+		"userName": user.UserName,
+		"userID":   user.ID,
 	})
+}
+func LogOut(c *gin.Context) {
+	c.SetCookie("Authorization", "", -1, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "Logged out"})
 }
 
 func SignUp(c *gin.Context, db *gorm.DB) {
@@ -95,8 +100,13 @@ func ValidateToken(c *gin.Context) {
 		})
 		return
 	}
+	userName := claims["userName"].(string)
+	userID := uint(claims["userID"].(float64))
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Token Validated",
+		"message":  "Token Validated",
+		"userName": userName,
+		"userID":   userID,
 	})
 
 }
