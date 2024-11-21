@@ -1,12 +1,10 @@
 import Header from "../components/Header";
-import CardsContainer from "../components/CardsContainer";
-import { RootState } from "../Redux/store/userStore";
-import { useSelector } from "react-redux";
+import CollectionsContainer from "../components/CollectionsContainer";
 function Home() {
   return (
     <div>
       <Header></Header>
-      <CardsContainer></CardsContainer>
+      <CollectionsContainer></CollectionsContainer>
     </div>
   );
 }

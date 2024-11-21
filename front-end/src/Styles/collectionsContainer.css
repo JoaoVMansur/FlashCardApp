@@ -1,0 +1,140 @@
+.collections-container-wrapper {
+  margin-top: 3rem;
+  width: 80%;
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+.collections-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  padding-left: 2rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.collections-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
+.collection {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: white;
+  font-weight: 600;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.collection:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.collection-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+  color: #fff;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.icons-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.icon:hover {
+  color: #fff;
+}
+
+.edit-icon:hover {
+  color: #4caf50;
+}
+
+.delete-icon:hover {
+  color: #f44336;
+}
+
+.collection.add-collection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  height: 150px;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.collection.add-collection:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px);
+}
+
+.add-icon {
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+}
+
+.add-icon-border {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .collections-container {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .collections-title {
+    font-size: 1.8rem;
+  }
+}

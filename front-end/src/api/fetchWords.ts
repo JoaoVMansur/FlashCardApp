@@ -1,12 +1,13 @@
 import axios from "axios";
 import { baseURL } from "../Globals";
-async function featchWords() {
+
+async function fetchCollection(id: number) {
   try {
-    const response = await axios.get(`${baseURL}/words`, {
+    const response = await axios.get(`${baseURL}/collection/${id}`, {
       withCredentials: true,
     });
     const data = await response.data;
-    return data;
+    return data.collection;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("axios error: ", error.message);
@@ -17,4 +18,4 @@ async function featchWords() {
   }
 }
 
-export default featchWords;
+export default fetchCollection;

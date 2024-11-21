@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import AddCard from "./pages/AddCard";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/ProtectedRoute";
+import Collection from "./components/Collection";
 
 function App() {
   return (
@@ -31,6 +32,14 @@ function App() {
           element={
             <PrivateRoute>
               <AddCard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/collection/:id"
+          element={
+            <PrivateRoute>
+              <Collection />
             </PrivateRoute>
           }
         />

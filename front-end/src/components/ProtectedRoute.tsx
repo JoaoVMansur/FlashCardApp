@@ -12,7 +12,6 @@ interface PrivateRouteProps {
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const userState = useSelector((state: RootState) => state.User);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,21 +21,12 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
       return;
     }
 
-    console.log("Validando token");
     axios
       .get(`${baseURL}/validate-token`, { withCredentials: true })
-      .then((response) => {
-        dispatch(
-          setUser({
-            userID: response.data.userID,
-            userName: response.data.userName,
-          })
-        );
-      })
       .catch(() => {
         navigate("/login", { replace: true });
       });
-  }, [userState, dispatch, navigate]);
+  }, [userState, navigate]);
 
   return <>{children}</>;
 };
