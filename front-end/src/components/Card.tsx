@@ -20,8 +20,6 @@ function Card() {
       verse: verse,
     };
     const data = await addCard(card);
-    console.log("DATA");
-    console.log(data);
     if (!data) {
       alert("Word Already Added");
     } else {

@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const baseURL = import.meta.env.VITE_BASE_URL; // Vite env variable
+import { baseURL } from "../Globals";
 
 interface User {
   userName: string;
@@ -9,7 +8,9 @@ interface User {
 
 async function Login(user: User) {
   try {
-    const response = await axios.post(`${baseURL}/login`, user); // Remove JSON.stringify
+    const response = await axios.post(`${baseURL}/login`, user, {
+      withCredentials: true,
+    });
     if (response.status !== 200) {
       console.error(
         `Error: Received unexpected status code ${response.status}`

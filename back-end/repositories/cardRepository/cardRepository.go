@@ -29,11 +29,11 @@ func GetAllCards(db *gorm.DB) ([]schemas.Card, error) {
 func AddCard(db *gorm.DB, card *schemas.Card) (uint, error) {
 
 	var duplicada schemas.Card
-	if err := db.Where("front = ?", card.Front).First(&duplicada).Error; err == nil {
+	if err := db.Where("front = ? AND collection_id = ?", card.Front, card.CollectionID).First(&duplicada).Error; err == nil {
 
 		return 0, &CardAlreadyAddedError{
 			Status:  406,
-			Message: "Word Card Added",
+			Message: "Word Card already added",
 		}
 	}
 
@@ -42,4 +42,12 @@ func AddCard(db *gorm.DB, card *schemas.Card) (uint, error) {
 		return 0, result.Error
 	}
 	return card.ID, nil
+}
+
+func DeleteCard(db *gorm.DB, cardID uint) error {
+	result := db.Delete(&schemas.Card{}, cardID)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }

@@ -1,16 +1,10 @@
-import { useState } from "react";
 import Header from "../components/Header";
-import CardsContainer from "../components/CardsContainer";
-import { useLocation } from "react-router-dom";
+import CollectionsContainer from "../components/CollectionsContainer";
 function Home() {
-  const location = useLocation();
-
-  const userName = location.state ? location.state.userNAme : "Joao";
-
   return (
     <div>
-      <Header userName={userName}></Header>
-      <CardsContainer></CardsContainer>
+      <Header></Header>
+      <CollectionsContainer></CollectionsContainer>
     </div>
   );
 }

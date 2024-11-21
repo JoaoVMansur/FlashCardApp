@@ -1,9 +1,11 @@
 package userController
 
 import (
+	"JoaoVMansur/Korean-Portuguese-vocab/auth"
 	"JoaoVMansur/Korean-Portuguese-vocab/repositories/userRepository"
 	"JoaoVMansur/Korean-Portuguese-vocab/schemas"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -15,6 +17,7 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 
 	if err := c.BindJSON(&userFetched); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	passWord := userFetched.PassWord
@@ -23,12 +26,30 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Password or User Invalid"})
+		return
 	}
 
 	if user.PassWord != passWord {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Password or User Invalid"})
+		return
 	}
-	c.JSON(http.StatusOK, user.ID)
+
+	tokenString, err := auth.CreateToken(user.UserName, user.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24, "", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{
+		"userName": user.UserName,
+		"userID":   user.ID,
+	})
+}
+func LogOut(c *gin.Context) {
+	c.SetCookie("Authorization", "", -1, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "Logged out"})
 }
 
 func SignUp(c *gin.Context, db *gorm.DB) {
@@ -45,5 +66,47 @@ func SignUp(c *gin.Context, db *gorm.DB) {
 	}
 
 	c.JSON(http.StatusCreated, userID)
+
+}
+func ValidateToken(c *gin.Context) {
+
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Token Not Found",
+		})
+		return
+	}
+	claims, err := auth.VerifyToken(tokenString)
+	if err != nil {
+
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Invalid Token",
+		})
+		return
+	}
+	exp, ok := claims["exp"].(float64)
+
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Invalid Token Format",
+		})
+		return
+	}
+	now := float64(time.Now().Unix())
+	if now > exp {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Token Expired",
+		})
+		return
+	}
+	userName := claims["userName"].(string)
+	userID := uint(claims["userID"].(float64))
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":  "Token Validated",
+		"userName": userName,
+		"userID":   userID,
+	})
 
 }

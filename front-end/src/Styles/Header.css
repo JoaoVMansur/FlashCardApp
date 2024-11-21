@@ -2,3 +2,29 @@
   width: 40px;
   height: 40px;
 }
+#userName-header {
+  position: relative;
+  color: white;
+  padding: 8px;
+  cursor: pointer;
+}
+.nav-link {
+  color: white;
+}
+
+.logout-popup {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #343a40;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.logout-popup:hover {
+  background-color: #23272b;
+}

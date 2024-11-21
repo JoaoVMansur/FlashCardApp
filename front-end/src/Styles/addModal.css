@@ -1,0 +1,96 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(18, 18, 18, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background-color: #1c1c1c;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.modal-input {
+  padding: 1rem;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  background-color: #333;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.modal-input::placeholder {
+  color: #aaa;
+}
+
+.modal-input:focus {
+  border-color: #ff5722;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.cancel-btn:hover {
+  background-color: #e53935;
+}
+
+.submit-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
