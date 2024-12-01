@@ -32,10 +32,7 @@ function Header() {
             <a className="nav-link" aria-current="page" href="/Home">
               Home
             </a>
-            <a className="nav-link" href="/AddCard">
-              Add Card
-            </a>
-            <a className="nav-link" href="#">
+            <a className="nav-link" href="/profile">
               Profile
             </a>
           </div>

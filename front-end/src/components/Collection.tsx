@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../Styles/collectionsContainer.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import AddModal from "./addModal";
+import AddModal from "./Modals/addCollectionModal";
 import addCard from "../api/addCard";
 import fetchCollection from "../api/fetchWords";
 import { deleteCard } from "../api/deleteCard";
@@ -134,8 +134,6 @@ function Collection() {
 
       <AddModal
         isOpen={showAddModal}
-        collection={false}
-        card={true}
         onClose={() => setShowAddModal(false)}
         onSubmit={handleAddCard}
       />

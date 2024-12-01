@@ -16,7 +16,6 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   useEffect(() => {
     if (!userState.isLoggedIn) {
-      console.log(userState);
       navigate("/login", { replace: true });
       return;
     }

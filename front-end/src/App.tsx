@@ -5,6 +5,8 @@ import AddCard from "./pages/AddCard";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/ProtectedRoute";
 import Collection from "./components/Collection";
+import SingUp from "./pages/SingUp";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
           }
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/singup" element={<SingUp />} />
         <Route
           path="/home"
           element={
@@ -40,6 +43,15 @@ function App() {
           element={
             <PrivateRoute>
               <Collection />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/signup" element={<SingUp />} />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
             </PrivateRoute>
           }
         />

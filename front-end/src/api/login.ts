@@ -2,7 +2,7 @@ import axios from "axios";
 import { baseURL } from "../Globals";
 
 interface User {
-  userName: string;
+  Email: string;
   passWord: string;
 }
 

@@ -2,10 +2,13 @@ import "../Styles/collectionsContainer.css";
 import "../Styles/addModal.css";
 import fetchCollections from "../api/fetchCollections";
 import { useEffect, useState } from "react";
-import AddModal from "./addModal";
 import addCollection from "../api/addCollection";
-import { FaEdit, FaTrash } from "react-icons/fa"; // FontAwesome Icons for edit and delete
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import deleteCollection from "../api/deleteColletion";
+import AddModalCollection from "./Modals/addCollectionModal";
+import EditModalCollection from "./Modals/editCollectionModal";
+import EditCollectionName from "../api/editCollection";
 
 interface Collection {
   ID: number;
@@ -15,8 +18,10 @@ interface Collection {
 function CollectionsContainer() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [editCollectionID, setEditCollectionID] = useState<number | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editCollectionID, setEditCollectionID] = useState<number>(0);
   const [newName, setNewName] = useState<string>("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,12 +51,12 @@ function CollectionsContainer() {
   const handleEditCollection = (id: number, currentName: string) => {
     setEditCollectionID(id);
     setNewName(currentName);
+    setShowEditModal(true);
   };
 
   const handleDeleteCollection = async (id: number) => {
     try {
-      // Implement the delete logic here (API call to delete collection)
-      console.log("Deleting collection with ID:", id);
+      await deleteCollection(id);
       const updatedData = await fetchCollections();
       setCollections(updatedData.collections);
     } catch (err) {
@@ -59,16 +64,14 @@ function CollectionsContainer() {
     }
   };
 
-  const handleSaveEdit = async () => {
+  const handleSaveEdit = async (collection: Collection) => {
     if (editCollectionID !== null) {
       try {
-        // Implement API call to save the edited collection name
-        console.log(
-          `Saving new name: ${newName} for collection ID: ${editCollectionID}`
-        );
+        await EditCollectionName(collection);
         const updatedData = await fetchCollections();
         setCollections(updatedData.collections);
-        setEditCollectionID(null); // Reset edit state
+        setShowEditModal(false);
+        setEditCollectionID(0);
         setNewName("");
       } catch (err) {
         console.error("Error updating collection name:", err);
@@ -99,62 +102,60 @@ function CollectionsContainer() {
             key={collection.ID}
             onClick={() => handleCollectionClick(collection.ID)}
           >
-            <span className="collection-name">
-              {editCollectionID === collection.ID ? (
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={(e) => {
-                    e.stopPropagation();
-                    setNewName(e.target.value);
-                  }}
-                  autoFocus
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ) : (
-                collection.CollectionName
-              )}
-            </span>
+            <span className="collection-name">{collection.CollectionName}</span>
             <div
               className="icons-container"
               onClick={(e) => e.stopPropagation()}
             >
-              {editCollectionID === collection.ID ? (
-                <button onClick={handleSaveEdit}>Save</button>
-              ) : (
-                <>
-                  <FaEdit
-                    className="icon edit-icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditCollection(
-                        collection.ID,
-                        collection.CollectionName
-                      );
-                    }}
-                  />
-                  <FaTrash
-                    className="icon delete-icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteCollection(collection.ID);
-                    }}
-                  />
-                </>
-              )}
+              <FaEdit
+                className="icon edit-icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEditCollection(
+                    collection.ID,
+                    collection.CollectionName
+                  );
+                }}
+              />
+              <FaTrash
+                className="icon delete-icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteCollection(collection.ID);
+                }}
+              />
             </div>
           </div>
         ))}
       </div>
-      {showAddModal && (
-        <AddModal
-          isOpen={showAddModal}
-          collection={true}
-          card={false}
-          onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddCollection}
-        />
-      )}
+
+      <div>
+        {showAddModal && (
+          <AddModalCollection
+            isOpen={showAddModal}
+            onClose={() => setShowAddModal(false)}
+            onSubmit={handleAddCollection}
+          />
+        )}
+      </div>
+
+      <div>
+        {showEditModal && (
+          <EditModalCollection
+            isOpen={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            onSubmit={(data) => {
+              const collection: Collection = {
+                ID: editCollectionID,
+                CollectionName: data.name,
+              };
+              handleSaveEdit(collection);
+            }}
+            initialName={newName}
+            collectionId={editCollectionID}
+          />
+        )}
+      </div>
     </div>
   );
 }

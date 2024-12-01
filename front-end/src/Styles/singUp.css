@@ -1,0 +1,84 @@
+.SignUpPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  background-color: #444;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 400px;
+}
+
+#signUpTitle {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #ffffff;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #666;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.input-field:focus {
+  border-color: #00aaff;
+  outline: none;
+  background-color: #444;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  background-color: #00aaff;
+  color: white;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #0077cc;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #bbb;
+}
+
+.password-toggle:hover {
+  color: #00aaff;
+}

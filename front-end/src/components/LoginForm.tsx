@@ -6,12 +6,12 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../Redux/user/userSlice";
 
 interface User {
-  userName: string;
+  Email: string;
   passWord: string;
 }
 
 function LoginForm() {
-  const [userName, setUserName] = useState("");
+  const [Email, setEmail] = useState("");
   const [passWord, setPassWord] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ function LoginForm() {
     e.preventDefault();
 
     const user: User = {
-      userName,
+      Email,
       passWord,
     };
 
@@ -28,8 +28,9 @@ function LoginForm() {
     if (data) {
       dispatch(
         setUser({
+          userName: data.userName,
           userID: data.userID,
-          userName: userName,
+          email: data.email,
         })
       );
       navigate("/home");
@@ -44,13 +45,13 @@ function LoginForm() {
         <form className="login-form" onSubmit={handleSubmit}>
           <h1 id="loginTitle">Login</h1>
           <div className="form-group">
-            <label htmlFor="username">Username:</label>
+            <label htmlFor="Email">Email:</label>
             <input
               type="text"
-              id="username"
-              placeholder="Enter your username"
-              name="username"
-              onChange={(e) => setUserName(e.target.value)}
+              id="Email"
+              placeholder="Enter your Email"
+              name="Email"
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -72,7 +73,7 @@ function LoginForm() {
         <div className="create-account-link text-white">
           <p>
             Don't have an account?{" "}
-            <Link to="/create-account" className="create-account-link-text">
+            <Link to="/signup" className="create-account-link-text">
               Create one
             </Link>
           </p>
