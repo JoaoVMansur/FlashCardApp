@@ -1,8 +1,13 @@
 import Header from "./Header";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../Styles/collectionsContainer.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaArrowCircleLeft,
+  FaArrowLeft,
+  FaEdit,
+  FaTrash,
+} from "react-icons/fa";
 import AddModal from "./Modals/addCollectionModal";
 import addCard from "../api/addCard";
 import fetchCollection from "../api/fetchWords";
@@ -77,7 +82,12 @@ function Collection() {
     <>
       <Header />
       <div className="collections-container-wrapper">
-        <h1 className="collections-title">{collection}</h1>
+        <h1 className="collections-title">
+          <Link to="/" style={{ color: "inherit" }}>
+            <FaArrowLeft style={{ color: "inherit" }} />
+          </Link>
+          {collection}
+        </h1>
         <div className="collections-container">
           <div
             className="collection add-collection"

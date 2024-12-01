@@ -7,6 +7,8 @@ import fetchCollections from "../api/fetchCollections";
 import updateUser from "../api/updateUser";
 import { setUser } from "../Redux/user/userSlice";
 import { UseDispatch } from "react-redux";
+import { FaArrowLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 interface Stats {
   Colecao: number;
   Cartao: number;
@@ -59,7 +61,12 @@ const Profile = () => {
       <Header />
       <div className="profile-container">
         <div className="profile-header">
-          <h1 className="profile-name">{userName}</h1>
+          <h1 className="profile-name">
+            <Link to="/" style={{ color: "inherit" }}>
+              <FaArrowLeft style={{ color: "inherit" }} />
+            </Link>
+            {userName}
+          </h1>
         </div>
 
         <div className="profile-details">
