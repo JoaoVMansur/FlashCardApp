@@ -69,3 +69,28 @@ func CreateCollection(db *gorm.DB, collection *schemas.Collection) (uint, error)
 	}
 	return collection.ID, nil
 }
+
+func DeleteCollection(db *gorm.DB, userId uint, collectionId uint) error {
+	return db.Where("id = ? AND user_id = ?", collectionId, userId).Delete(&schemas.Collection{}).Error
+}
+
+func UpdateCollection(db *gorm.DB, collection *schemas.Collection) error {
+	var currentCollection schemas.Collection
+
+	result := db.First(&currentCollection, collection.ID)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	var collectionCheck schemas.Collection
+	if err := db.Where("collection_name = ? AND user_id = ?", collection.CollectionName, collection.UserID).First(&collectionCheck).Error; err == nil {
+		return fmt.Errorf("a collection with this name already exists")
+	}
+
+	currentCollection.CollectionName = collection.CollectionName
+	if err := db.Save(&currentCollection).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -29,12 +30,13 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	if user.PassWord != passWord {
+	err = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(passWord))
+	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Password or User Invalid"})
 		return
 	}
 
-	tokenString, err := auth.CreateToken(user.UserName, user.ID)
+	tokenString, err := auth.CreateToken(user.Email, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -44,6 +46,7 @@ func LogIn(c *gin.Context, db *gorm.DB) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"userName": user.UserName,
+		"email":    user.Email,
 		"userID":   user.ID,
 	})
 }
@@ -58,7 +61,12 @@ func SignUp(c *gin.Context, db *gorm.DB) {
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.PassWord), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, err.Error())
+		return
+	}
+	user.PassWord = string(hashedPassword)
 	userID, err := userRepository.CreateUser(db, &user)
 
 	if err != nil {
@@ -68,6 +76,21 @@ func SignUp(c *gin.Context, db *gorm.DB) {
 	c.JSON(http.StatusCreated, userID)
 
 }
+
+func EditUser(c *gin.Context, db *gorm.DB) {
+	var user schemas.User
+	if err := c.BindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := userRepository.UpdateUser(db, &user)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "User Updated"})
+}
+
 func ValidateToken(c *gin.Context) {
 
 	tokenString, err := c.Cookie("Authorization")
@@ -100,13 +123,13 @@ func ValidateToken(c *gin.Context) {
 		})
 		return
 	}
-	userName := claims["userName"].(string)
+	email := claims["email"].(string)
 	userID := uint(claims["userID"].(float64))
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":  "Token Validated",
-		"userName": userName,
-		"userID":   userID,
+		"message": "Token Validated",
+		"email":   email,
+		"userID":  userID,
 	})
 
 }

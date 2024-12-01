@@ -111,3 +111,64 @@ func GetCollection(c *gin.Context, db *gorm.DB) {
 
 	c.JSON(http.StatusOK, gin.H{"collection": collection})
 }
+func DeleteCollection(c *gin.Context, db *gorm.DB) {
+	collectionID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
+		return
+	}
+	claims, err := auth.VerifyToken(tokenString)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token inválido"})
+		return
+	}
+	userID := uint(claims["userID"].(float64))
+
+	err = collectionRepository.DeleteCollection(db, userID, uint(collectionID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+}
+func EditCollection(c *gin.Context, db *gorm.DB) {
+
+	var collection schemas.Collection
+
+	if err := c.BindJSON(&collection); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	collectionID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+	collection.ID = uint(collectionID)
+
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+	claims, err := auth.VerifyToken(tokenString)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+
+	collection.UserID = uint(claims["userID"].(float64))
+
+	err = collectionRepository.UpdateCollection(db, &collection)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit collection", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Collection updated successfully", "collection": collection})
+}

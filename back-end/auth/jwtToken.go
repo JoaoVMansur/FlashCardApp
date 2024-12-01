@@ -9,11 +9,11 @@ import (
 
 var secretKey = []byte("secret-key")
 
-func CreateToken(userName string, userId uint) (string, error) {
+func CreateToken(email string, userId uint) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userName": userName,
-		"userID":   userId,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"email":  email,
+		"userID": userId,
+		"exp":    time.Now().Add(time.Hour * 24).Unix(),
 	})
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
