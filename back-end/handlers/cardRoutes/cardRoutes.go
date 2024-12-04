@@ -15,6 +15,9 @@ func InitCardRoutes(db *gorm.DB, r *gin.Engine) {
 	r.POST("/card", middleware.RequireAuth, func(c *gin.Context) {
 		cardController.AddCard(c, db)
 	})
+	r.PUT("card/:id", middleware.RequireAuth, func(c *gin.Context) {
+		cardController.EditCard(c, db)
+	})
 	r.DELETE("/card/:id", middleware.RequireAuth, func(c *gin.Context) {
 		cardController.DeleteCard(c, db)
 	})

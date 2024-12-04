@@ -6,7 +6,6 @@ import { RootState } from "../Redux/store/userStore";
 import fetchCollections from "../api/fetchCollections";
 import updateUser from "../api/updateUser";
 import { setUser } from "../Redux/user/userSlice";
-import { UseDispatch } from "react-redux";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 interface Stats {

@@ -86,3 +86,33 @@ func DeleteCard(c *gin.Context, db *gorm.DB) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Card deleted successfully"})
 }
+
+func EditCard(c *gin.Context, db *gorm.DB) {
+	var card schemas.Card
+	cardId, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+	if err := c.BindJSON(&card); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	card.ID = uint(cardId)
+
+	err = cardRepository.EditCard(db, &card)
+
+	if err != nil {
+		if customErr, ok := err.(*cardRepository.CardAlreadyAddedError); ok && customErr.Status == 406 {
+			c.JSON(http.StatusNotAcceptable, gin.H{
+				"error":   "Not Acceptable",
+				"message": customErr.Message,
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit card", "details": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Card updated successfully", "Card": card})
+
+}

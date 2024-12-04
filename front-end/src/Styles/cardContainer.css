@@ -10,15 +10,24 @@ div.card {
   transition: background-color 0.3s;
 }
 
-#cardsContainer {
+.card-container-wrapper {
+  margin-top: 3rem;
+  width: 80%;
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+.cardsContainer {
   display: flex;
   flex-wrap: wrap;
+  background-color: red;
   justify-content: center;
   margin-top: 20px;
 }
 
-#card {
+.card {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
