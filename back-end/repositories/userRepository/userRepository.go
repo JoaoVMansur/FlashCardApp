@@ -45,3 +45,21 @@ func UpdateUser(db *gorm.DB, user *schemas.User) error {
 
 	return nil
 }
+func UpdateUserPassword(db *gorm.DB, userId uint, newPassword string) error {
+	var user schemas.User
+	result := db.First(&user, userId)
+	if result.Error != nil {
+		return result.Error
+	}
+	user.PassWord = newPassword
+	return db.Save(&user).Error
+}
+
+func GetUserByID(db *gorm.DB, userId uint) (*schemas.User, error) {
+	var user schemas.User
+	result := db.First(&user, userId)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &user, nil
+}

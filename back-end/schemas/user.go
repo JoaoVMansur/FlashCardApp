@@ -11,3 +11,9 @@ type User struct {
 	Email       string       `gorm:"unique;not null"`
 	Collections []Collection `gorm:"foreignKey:UserID"`
 }
+
+type ResetPasswordRequest struct {
+	CurrentPassword string `json:"currentPassword"`
+	NewPassword     string `json:"newPassword"`
+	ConfirmPassword string `json:"confirmPassword"`
+}

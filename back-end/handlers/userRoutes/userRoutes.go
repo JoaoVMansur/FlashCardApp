@@ -2,6 +2,7 @@ package userRoutes
 
 import (
 	"JoaoVMansur/Korean-Portuguese-vocab/controllers/userController"
+	middleware "JoaoVMansur/Korean-Portuguese-vocab/middleWare"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -17,10 +18,13 @@ func InitUserRoutes(db *gorm.DB, r *gin.Engine) {
 	r.POST("/logout", func(c *gin.Context) {
 		userController.LogOut(c)
 	})
-	r.POST("/update-user", func(c *gin.Context) {
+	r.POST("/update-user", middleware.RequireAuth, func(c *gin.Context) {
 		userController.EditUser(c, db)
 	})
 	r.GET("/validate-token", func(c *gin.Context) {
 		userController.ValidateToken(c)
+	})
+	r.POST("/reset-password", middleware.RequireAuth, func(c *gin.Context) {
+		userController.ResetPassword(c, db)
 	})
 }

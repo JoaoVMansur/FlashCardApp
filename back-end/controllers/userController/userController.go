@@ -131,5 +131,44 @@ func ValidateToken(c *gin.Context) {
 		"email":   email,
 		"userID":  userID,
 	})
+}
 
+func ResetPassword(c *gin.Context, db *gorm.DB) {
+	var userId uint
+	var resetPasswordRequest schemas.ResetPasswordRequest
+	if err := c.ShouldBindJSON(&resetPasswordRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	currentPassword := resetPasswordRequest.CurrentPassword
+
+	userId = c.GetUint("userID")
+	user, err := userRepository.GetUserByID(db, userId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		return
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(currentPassword))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Current Password is incorrect"})
+		return
+	}
+	newPassword := resetPasswordRequest.NewPassword
+	confirmPassword := resetPasswordRequest.ConfirmPassword
+	if newPassword != confirmPassword {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Passwords do not match"})
+		return
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, err.Error())
+		return
+	}
+	user.PassWord = string(hashedPassword)
+	err = userRepository.UpdateUserPassword(db, userId, string(hashedPassword))
+	if err != nil {
+		c.JSON(http.StatusBadGateway, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Password Reset Successfully"})
 }
