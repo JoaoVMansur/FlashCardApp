@@ -24,7 +24,10 @@ func InitUserRoutes(db *gorm.DB, r *gin.Engine) {
 	r.GET("/validate-token", func(c *gin.Context) {
 		userController.ValidateToken(c)
 	})
-	r.POST("/reset-password", middleware.RequireAuth, func(c *gin.Context) {
+	r.POST("/change-password", middleware.RequireAuth, func(c *gin.Context) {
+		userController.ChangePassword(c, db)
+	})
+	r.POST("reset-password", func(c *gin.Context) {
 		userController.ResetPassword(c, db)
 	})
 }

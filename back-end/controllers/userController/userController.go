@@ -4,6 +4,7 @@ import (
 	"JoaoVMansur/Korean-Portuguese-vocab/auth"
 	"JoaoVMansur/Korean-Portuguese-vocab/repositories/userRepository"
 	"JoaoVMansur/Korean-Portuguese-vocab/schemas"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -133,14 +134,14 @@ func ValidateToken(c *gin.Context) {
 	})
 }
 
-func ResetPassword(c *gin.Context, db *gorm.DB) {
+func ChangePassword(c *gin.Context, db *gorm.DB) {
 	var userId uint
-	var resetPasswordRequest schemas.ResetPasswordRequest
-	if err := c.ShouldBindJSON(&resetPasswordRequest); err != nil {
+	var changePasswordRequest schemas.ChangePasswordRequest
+	if err := c.ShouldBindJSON(&changePasswordRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	currentPassword := resetPasswordRequest.CurrentPassword
+	currentPassword := changePasswordRequest.CurrentPassword
 
 	userId = c.GetUint("userID")
 	user, err := userRepository.GetUserByID(db, userId)
@@ -153,8 +154,8 @@ func ResetPassword(c *gin.Context, db *gorm.DB) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Current Password is incorrect"})
 		return
 	}
-	newPassword := resetPasswordRequest.NewPassword
-	confirmPassword := resetPasswordRequest.ConfirmPassword
+	newPassword := changePasswordRequest.NewPassword
+	confirmPassword := changePasswordRequest.ConfirmPassword
 	if newPassword != confirmPassword {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Passwords do not match"})
 		return
@@ -171,4 +172,24 @@ func ResetPassword(c *gin.Context, db *gorm.DB) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Password Reset Successfully"})
+}
+
+func ResetPassword(c *gin.Context, db *gorm.DB) {
+	var resetPasswordRequest schemas.ResetPasswordRequest
+	var userEmail schemas.User
+
+	if err := c.BindJSON(&resetPasswordRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	userEmail.Email = resetPasswordRequest.Email
+
+	user, err := userRepository.GetUser(db, &userEmail)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		return
+	}
+	fmt.Println(user)
+
+	return
 }
